@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#f4f7fb">
+  <title>Учёт сверхурочных — Казахтелеком</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main id="loginScreen" class="login-screen">
+    <section class="login-card">
+      <div class="brand-mark">kt<span>.</span></div>
+      <p class="eyebrow">ПУБЛИЧНОЕ ДЕМО · АО «Казахтелеком»</p>
+      <h1>Учёт рабочего времени</h1>
+      <p class="muted login-copy">Тестовый вход: <strong>demo / demo</strong>. Данные остаются только в этом браузере — не вводите сведения о реальных сотрудниках.</p>
+      <form id="loginForm" class="login-form">
+        <label>Логин<input id="loginName" autocomplete="username" value="demo" required></label>
+        <label>Пароль<input id="loginPassword" type="password" autocomplete="current-password" placeholder="Введите пароль" required></label>
+        <p id="loginError" class="form-error" aria-live="polite"></p>
+        <button class="button primary full-width" type="submit">Войти <span aria-hidden="true">→</span></button>
+      </form>
+      <div class="login-foot"><span class="status-dot"></span> Внутренний журнал подразделения</div>
+    </section>
+    <div class="login-decoration decoration-one"></div><div class="login-decoration decoration-two"></div>
+  </main>
+
+  <div id="appScreen" class="app-shell hidden">
+    <aside class="sidebar">
+      <a class="brand" href="#" aria-label="Казахтелеком"><span class="brand-mark small">kt<span>.</span></span><span>Казахтелеком<small>УЧЁТ РАБОЧЕГО ВРЕМЕНИ</small></span></a>
+      <div class="side-label">РАБОЧЕЕ ПРОСТРАНСТВО</div>
+      <button class="nav-item active" type="button"><span class="nav-icon">▦</span> Журнал работ</button>
+      <div class="side-bottom"><div class="side-info"><span class="side-info-icon">i</span><span>Данные сохраняются<br>в этом браузере</span></div><button id="logoutButton" class="logout-button" type="button"><span>↪</span> Выйти</button></div>
+    </aside>
+
+    <section class="main-area">
+      <header class="topbar"><div class="breadcrumbs">Рабочее пространство <span>/</span> <strong>Журнал работ</strong></div><div class="user-chip"><span class="avatar">C</span><span><strong>cou</strong><small>Администратор</small></span><span class="chevron">⌄</span></div></header>
+      <main class="content">
+        <div class="page-heading"><div><div class="eyebrow">ПЕРСОНАЛ · УЧЁТ ВРЕМЕНИ</div><h1>Журнал сверхурочных работ</h1><p class="muted">Привлечение работников вне установленного рабочего времени</p></div><button id="addButton" class="button primary"><span class="plus">＋</span> Добавить запись</button></div>
+
+        <section class="stats-grid" aria-label="Сводка">
+          <article class="stat-card"><div class="stat-top"><span>Записей за период</span><span class="stat-icon blue">▤</span></div><div id="statRecords" class="stat-value">0</div><div class="stat-note">За всё время</div></article>
+          <article class="stat-card"><div class="stat-top"><span>Всего часов</span><span class="stat-icon violet">◷</span></div><div id="statHours" class="stat-value">0 <small>ч</small></div><div class="stat-note">Суммарная длительность</div></article>
+          <article class="stat-card"><div class="stat-top"><span>Ночные работы</span><span class="stat-icon red">☾</span></div><div id="statNight" class="stat-value">0</div><div class="stat-note">С 22:00 до 06:00</div></article>
+          <article class="stat-card"><div class="stat-top"><span>В выходные и праздники</span><span class="stat-icon amber">▣</span></div><div id="statDays" class="stat-value">0</div><div class="stat-note">Особые календарные дни</div></article>
+        </section>
+
+        <section class="table-card">
+          <div class="table-heading"><div><h2>Записи</h2><p id="recordCaption" class="muted">Все привлечения к работам</p></div><div class="table-actions"><label class="search-box"><span>⌕</span><input id="searchInput" type="search" placeholder="Поиск по работнику, билету…" aria-label="Поиск"></label><button id="excelButton" class="button secondary"><span class="export-icon green">▦</span> Excel</button><button id="wordButton" class="button secondary"><span class="export-icon blue-text">▤</span> Word</button></div></div>
+          <div class="table-wrap"><table><thead><tr><th>РАБОТНИК</th><th>ПОДРАЗДЕЛЕНИЕ · ДОЛЖНОСТЬ</th><th>ГОРОД / РАЙОН</th><th>ДАТА И ВРЕМЯ</th><th>ТИП РАБОТ</th><th>ДЕНЬ</th><th>БИЛЕТ</th><th>ЧАСЫ</th><th></th></tr></thead><tbody id="recordsBody"></tbody></table><div id="emptyState" class="empty-state"><div class="empty-icon">▤</div><strong>Пока нет записей</strong><p>Добавьте первую запись о сверхурочной работе</p><button class="button primary small-button" id="emptyAddButton" type="button">＋ Добавить запись</button></div></div>
+          <div class="table-footer"><span id="tableCount">Показано 0 записей</span><span>Все данные отображаются по местному времени</span></div>
+        </section>
+        <footer class="page-footer">АО «Казахтелеком» <span>·</span> Журнал сверхурочных работ</footer>
+      </main>
+    </section>
+  </div>
+
+  <dialog id="recordDialog" class="record-dialog">
+    <form id="recordForm" method="dialog">
+      <div class="modal-heading"><div><div class="eyebrow">ЖУРНАЛ РАБОТ</div><h2 id="dialogTitle">Новая запись</h2><p class="muted">Заполните сведения о привлечении работника</p></div><button id="closeDialog" class="icon-button" type="button" aria-label="Закрыть">×</button></div>
+      <input id="recordId" type="hidden">
+      <div class="form-section-title"><span>01</span> ДАННЫЕ РАБОТНИКА</div>
+      <div class="form-grid">
+        <label class="span-two">Фамилия, имя, отчество <b>*</b><input id="employee" placeholder="Например, Иванов Иван Иванович" required maxlength="120"></label>
+        <label>Должность <b>*</b><select id="position" required><option value="">Выберите должность</option><option>Электромеханик</option><option>Электромонтёр</option><option>Инженер</option><option>Ведущий инженер</option><option>Начальник</option></select></label>
+        <label>Структурное подразделение <b>*</b><select id="department" required><option value="">Выберите подразделение</option><option>СФ</option><option>ЦЭиК</option><option>ЦТО МС</option><option>ЦТПСР</option></select></label>
+        <label>Табельный номер <b>*</b><input id="employeeNumber" inputmode="numeric" placeholder="Например, 104258" required maxlength="30"></label>
+        <label>Город / район <b>*</b><select id="city" required><option value="">Выберите населённый пункт</option><option>Усть-Каменогорск</option><option>Семей</option></select></label>
+      </div>
+      <div class="form-section-title second-section"><span>02</span> СВЕДЕНИЯ О РАБОТАХ</div>
+      <div class="form-grid">
+        <label>Дата привлечения <b>*</b><input id="workDate" type="date" required><small id="dayHint" class="field-hint">Выходной или праздник определится автоматически</small></label>
+        <label>Время начала <b>*</b><input id="startTime" type="time" min="00:00" max="23:45" step="900" value="00:00" required></label>
+        <label>Время окончания <b>*</b><input id="endTime" type="time" min="00:00" max="23:45" step="900" value="00:00" required></label>
+        <label>Номер проблемного билета <b>*</b><input id="ticket" placeholder="Например, INC-104582" required maxlength="60"></label>
+        <div class="span-two derived-preview"><div><span class="preview-label">ТИП РАБОТ · ГРАФА 9</span><div id="typePreview" class="type-pill neutral">Укажите время начала</div></div><div><span class="preview-label">ДЕНЬ · ГРАФА 10</span><div id="dayPreview" class="day-pill">Рабочий день</div></div><div class="derived-hours"><span class="preview-label">ДЛИТЕЛЬНОСТЬ · ГРАФА 11</span><strong id="durationPreview">—</strong></div></div>
+      </div>
+      <div id="formError" class="form-error" aria-live="polite"></div>
+      <div class="modal-actions"><button id="cancelDialog" type="button" class="button secondary">Отмена</button><button type="submit" class="button primary"><span id="saveLabel">Сохранить запись</span> <span aria-hidden="true">→</span></button></div>
+    </form>
+  </dialog>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script src="app.js"></script>
+</body>
+</html>
